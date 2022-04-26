@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_UseX64=n
 #AutoIt3Wrapper_Res_Comment=VNC自动挂载FRP程序
 #AutoIt3Wrapper_Res_Description=由WXW编辑制作
-#AutoIt3Wrapper_Res_Fileversion=1.0.0.15
+#AutoIt3Wrapper_Res_Fileversion=1.0.0.17
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=@WXW
 #AutoIt3Wrapper_Res_Language=4100
@@ -33,13 +33,13 @@ Func Example()
 	
 	;GUI对话框
 	GUICreate("N2N&VNC-" & @CPUArch & "   www.fiwu.net", 400, 200)
-	GUICtrlCreateLabel("超级节点：", 10, 7)
+	GUICtrlCreateLabel("服务地址：", 10, 7)
 	$n2n_SAddr = GUICtrlCreateInput($n2n_SAddr, 80, 5, 100, 20)
-	GUICtrlCreateLabel("用户小组：", 10, 37)
+	GUICtrlCreateLabel("小组名称：", 10, 37)
 	$n2n_group = GUICtrlCreateInput($n2n_group, 80, 35, 100, 20)
 	GUICtrlCreateLabel("小组密码：", 10, 67)
 	$n2n_pwd = GUICtrlCreateInput($n2n_pwd, 80, 65, 100, 20)
-	GUICtrlCreateLabel("本地地址：", 10, 98)
+	GUICtrlCreateLabel("虚拟地址：", 10, 98)
 	$n2n_LAddr = GUICtrlCreateInput($n2n_LAddr, 80, 95, 100, 20)
 	GUICtrlCreateLabel("VNC 端口：", 10, 128)
 	$VNC_Port = GUICtrlCreateInput("15900", 80, 125, 100, 20)
@@ -48,7 +48,6 @@ Func Example()
 	
 	;显示框
 	GUICtrlCreateGroup("运行信息", 195, 5, 194, 100)
-	
 	
 	;GUI按钮
 	$start = GUICtrlCreateButton("启动服务", 40, 155, 60, 20)
@@ -105,6 +104,8 @@ Func Example()
 				ProcessClose("vncserver.exe");停止vncserver服务
 				Run(".\" & @CPUArch & "\vncserver.exe -service -stop", '', @SW_HIDE);停止vncserver服务
 				Run(@ComSpec & ' /c ' & 'netsh advfirewall firewall delete rule name="vncserver.exe"', '', @SW_HIDE);防火墙关闭端口
+				Run(@ComSpec & ' /c ' & 'sc stop vncserver', '', @SW_HIDE)
+				Run(@ComSpec & ' /c ' & 'sc delete vncserver', '', @SW_HIDE)
 				GUICtrlSetState($start, $GUI_ENABLE);按键变可用
 				;MsgBox(0, "提示-" & @CPUArch, "服务已停止")
 				;=======================================================================
@@ -125,6 +126,8 @@ Func Example()
 				ProcessClose("vncserver.exe");停止vncserver服务
 				Run(".\" & @CPUArch & "\vncserver.exe -service -stop", '', @SW_HIDE);停止vncserver服务
 				Run(@ComSpec & ' /c ' & 'netsh advfirewall firewall delete rule name="vncserver.exe"', '', @SW_HIDE);防火墙关闭端口
+				Run(@ComSpec & ' /c ' & 'sc stop vncserver', '', @SW_HIDE)
+				Run(@ComSpec & ' /c ' & 'sc delete vncserver', '', @SW_HIDE)
 				ExitLoop
 				;=======================================================================
 			Case $msg = $website1
