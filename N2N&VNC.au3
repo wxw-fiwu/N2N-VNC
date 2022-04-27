@@ -4,7 +4,7 @@
 #AutoIt3Wrapper_UseX64=n
 #AutoIt3Wrapper_Res_Comment=VNC自动挂载FRP程序
 #AutoIt3Wrapper_Res_Description=由WXW编辑制作
-#AutoIt3Wrapper_Res_Fileversion=1.0.0.17
+#AutoIt3Wrapper_Res_Fileversion=1.0.0.18
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=@WXW
 #AutoIt3Wrapper_Res_Language=4100
@@ -76,10 +76,10 @@ Func Example()
 				;用于显示连接终端信息
 				Local $netstat = Run(@ComSpec & ' /c ' & 'wmic NICCONFIG where "IPEnabled="TRUE"" get IPAddress | find "{"', '', @SW_HIDE, 15)
 				ProcessWaitClose($netstat)
-				$cat_netstat = StdoutRead($netstat)
+				$netstat = StdoutRead($netstat)
 				;GUICtrlCreateLabel($cat_netstat, 210, 20, 175, 80)
-				GUICtrlCreateEdit($cat_netstat, 199, 20, 185, 80)
-				GUICtrlSetState(GUICtrlRead($cat_netstat), 0)
+				GUICtrlCreateEdit($netstat, 199, 20, 185, 80)
+				;GUICtrlSetState(GUICtrlRead($cat_netstat), 0)
 				;MsgBox(0, "提示-" & @CPUArch, $cat_netstat)
 				;=======================================================================
 			Case $msg = $start
@@ -91,12 +91,12 @@ Func Example()
 				Run(".\" & @CPUArch & "\vnclicense.exe -add VKUPN-MTHHC-UDHGS-UWD76-6N36A", '', @SW_HIDE);VNC激活码到2029年的key
 				RegWrite($HKLM & "\Software\RealVNC\vncserver", "Authentication", "REG_SZ", "VncAuth")
 				RegWrite($HKLM & "\Software\RealVNC\vncserver", "RfbPort", "REG_SZ", GUICtrlRead($VNC_Port))
-				;RegWrite($HKLM & "\Software\RealVNC\vncserver", "Password", "REG_SZ", "f0e43164f6c2e373")
 				RegWrite($HKLM & "\Software\RealVNC\vncserver", "DisableTrayIcon", "REG_SZ", "1")
 				RegWrite($HKLM & "\Software\RealVNC\vncserver", "ConnNotifyTimeout", "REG_SZ", "0")
 				RegWrite($HKLM & "\Software\RealVNC\vncserver", "EnableAutoUpdateChecks", "REG_SZ", "0")
 				Run(".\" & @CPUArch & "\vncserver.exe -service -start", '', @SW_HIDE);开启vncserver服务
 				Run(".\" & @CPUArch & "\edge_v3.exe edge.conf", '', @SW_MINIMIZE);运行服务
+				
 				;=======================================================================
 			Case $msg = $stop
 				;=======================================================================
